@@ -4,11 +4,16 @@ using System.Linq;
 
 namespace LojaVirtual
 {
+    //edido feito por um cliente na loja
     public class Pedido
     {
+        //Pedido Unico
         public Guid Id { get; }
+        //Quem fez o pedido
         public Cliente Cliente { get; }
+        //Produtos inluidos no pedido
         public List<Produto> Produtos { get; }
+        //Data e hora do pedido
         public DateTime DataPedido { get; }
 
         public Pedido(Cliente cliente)
@@ -21,7 +26,7 @@ namespace LojaVirtual
             Produtos = new List<Produto>();
             DataPedido = DateTime.Now;
         }
-
+            //Adiciona produto ao pedido
         public void AdicionarProduto(Produto produto)
         {
             if (produto == null)
@@ -29,7 +34,7 @@ namespace LojaVirtual
 
             Produtos.Add(produto);
         }
-
+            //calcula o preço dos produtos do pedido, sem o frete
         public decimal ValorTotal
         {
             get
