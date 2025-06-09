@@ -4,19 +4,16 @@ using System.Linq;
 
 namespace LojaVirtual
 {
-    // Pedido feito por um cliente na loja
+    //edido feito por um cliente na loja
     public class Pedido
     {
-        // Pedido único
+        //Pedido Unico
         public Guid Id { get; }
-
-        // Quem fez o pedido
+        //Quem fez o pedido
         public Cliente Cliente { get; }
-
-        // Itens incluídos no pedido (produto + quantidade)
-        public List<ItemPedido> Itens { get; }
-
-        // Data e hora do pedido
+        //Produtos inluidos no pedido
+        public List<Produto> Produtos { get; }
+        //Data e hora do pedido
         public DateTime DataPedido { get; }
 
         public Pedido(Cliente cliente)
@@ -26,34 +23,23 @@ namespace LojaVirtual
 
             Id = Guid.NewGuid();
             Cliente = cliente;
-            Itens = new List<ItemPedido>();
+            Produtos = new List<Produto>();
             DataPedido = DateTime.Now;
         }
-
-        // Adiciona produto ao pedido com controle de quantidade
-        public void AdicionarProduto(Produto produto, int quantidade = 1)
+            //Adiciona produto ao pedido
+        public void AdicionarProduto(Produto produto)
         {
             if (produto == null)
                 throw new ArgumentNullException(nameof(produto), "Produto não pode ser nulo.");
 
-            var itemExistente = Itens.FirstOrDefault(i => i.Produto.Id == produto.Id);
-
-            if (itemExistente != null)
-            {
-                itemExistente.AdicionarQuantidade(quantidade);
-            }
-            else
-            {
-                Itens.Add(new ItemPedido(produto, quantidade));
-            }
+            Produtos.Add(produto);
         }
-
-        // Calcula o preço total dos produtos do pedido (sem frete)
+            //calcula o preço dos produtos do pedido, sem o frete
         public decimal ValorTotal
         {
             get
             {
-                return Itens.Sum(i => i.ValorBruto);
+                return Produtos.Sum(p => p.Preco);
             }
         }
     }
