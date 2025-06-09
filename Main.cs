@@ -48,6 +48,51 @@ namespace LojaVirtual
                 }
             }
 
+            // Agrupa os produtos do pedido em itens com quantidade
+            var itens = ItensPedido.Agrupar(pedido.Produtos);
+
+            // Variáveis para somar os totais
+            decimal totalSemDesconto = 0;
+            decimal totalDesconto = 0;
+
+            // Título do relatório
+            Console.WriteLine("\n--- Detalhes do Pedido ---\n");
+
+            // Percorre cada item do pedido (produto + quantidade)
+            foreach (var item in itens)
+            {
+                // Exibe nome e quantidade do produto
+                Console.WriteLine($"{item.Produto.Nome} (x{item.Quantidade})");
+
+                // Exibe o preço de cada unidade
+                Console.WriteLine($"Preço unitário: R$ {item.Produto.Preco:F2}");
+
+                // Exibe o total sem desconto (preço * quantidade)
+                Console.WriteLine($"Subtotal: R$ {item.ValorBruto:F2}");
+
+                // Exibe o valor do desconto aplicado, se houver
+                Console.WriteLine($"Desconto: R$ {item.Desconto:F2}");
+
+                // Exibe o valor final com desconto aplicado
+                Console.WriteLine($"Total com desconto: R$ {item.ValorComDesconto:F2}");
+
+                // Espaço entre os itens
+                Console.WriteLine();
+
+                // Soma os valores ao total
+                totalSemDesconto += item.ValorBruto;
+                totalDesconto += item.Desconto;
+            }
+
+            // Calcula o valor final com desconto
+            decimal totalFinal = totalSemDesconto - totalDesconto;
+
+            // Exibe o resumo do pedido no final
+            Console.WriteLine("--- Resumo ---");
+            Console.WriteLine($"Total sem desconto: R$ {totalSemDesconto:F2}");
+            Console.WriteLine($"Desconto total:     R$ {totalDesconto:F2}");
+            Console.WriteLine($"Total com desconto: R$ {totalFinal:F2}");
+
             // Mostrar resultados no console
             Console.WriteLine($"Cliente: {cliente.Nome}");
             Console.WriteLine($"Total sem desconto: R$ {pedido.ValorTotal:F2}");
