@@ -17,7 +17,7 @@ namespace LojaVirtual
                 throw new ArgumentNullException(nameof(produto), "Produto não pode ser nulo.");
 
             if (quantidade <= 0)
-                throw new ArgumentException("Quantidade deve ser maior que zero.");
+                throw new ArgumentException("O numero nao pode ser zero.");
 
             Produto = produto;
             Quantidade = quantidade;
@@ -26,7 +26,7 @@ namespace LojaVirtual
         // Valor total sem desconto (preço unitário * quantidade)
         public decimal ValorBruto => Produto.Preco * Quantidade;
 
-        // Desconto de 15% aplicado se a quantidade for 5 ou mais
+        // Desconta 15% aplicado se a quantidade for 5 ou mais
         public decimal Desconto => Quantidade >= 5 ? Produto.Preco * 0.15m * Quantidade : 0;
 
         // Valor final com desconto já aplicado
@@ -37,8 +37,8 @@ namespace LojaVirtual
         {
             return produtos
                 .GroupBy(p => p.Id) //Agrupa produtos do msm ID ou iguais
-                .Select(g => new ItensPedido(g.First(), g.Count()))
-                .ToList();
+                .Select(g => new ItensPedido(g.First(), g.Count())) //Percorre os identes com o mesmo ID fist pega o primeiro item Count conta quantos produtos tem
+                .ToList(); //Pegua todos os ItensPedido criados e transforme isso numa lista pronta para usar.
         }
     }
 }
