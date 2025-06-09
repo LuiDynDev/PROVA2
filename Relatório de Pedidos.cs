@@ -39,10 +39,8 @@ namespace LojaVirtual
                 {
                     Console.WriteLine($" - {produto.Nome} | Categoria: {produto.Categoria} | Preço: R$ {produto.Preco:F2}");
                 }
-
                 //Valor do pedido
                 Console.WriteLine($"Valor Total: R$ {pedido.ValorTotal:F2}");
-                Console.WriteLine("-------------------------------");
             }
         }
     }

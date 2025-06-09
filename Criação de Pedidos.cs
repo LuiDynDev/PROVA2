@@ -4,16 +4,19 @@ using System.Linq;
 
 namespace LojaVirtual
 {
-    //edido feito por um cliente na loja
+    // Pedido feito por um cliente na loja
     public class Pedido
     {
-        //Pedido Unico
+        // Pedido único
         public Guid Id { get; }
-        //Quem fez o pedido
+
+        // Quem fez o pedido
         public Cliente Cliente { get; }
-        //Produtos inluidos no pedido
-        public List<Produto> Produtos { get; }
-        //Data e hora do pedido
+
+        // Itens incluídos no pedido (produto + quantidade)
+        public List<ItemPedido> Itens { get; }
+
+        // Data e hora do pedido
         public DateTime DataPedido { get; }
 
         public Pedido(Cliente cliente)
@@ -23,23 +26,34 @@ namespace LojaVirtual
 
             Id = Guid.NewGuid();
             Cliente = cliente;
-            Produtos = new List<Produto>();
+            Itens = new List<ItemPedido>();
             DataPedido = DateTime.Now;
         }
-            //Adiciona produto ao pedido
-        public void AdicionarProduto(Produto produto)
+
+        // Adiciona produto ao pedido com controle de quantidade
+        public void AdicionarProduto(Produto produto, int quantidade = 1)
         {
             if (produto == null)
                 throw new ArgumentNullException(nameof(produto), "Produto não pode ser nulo.");
 
-            Produtos.Add(produto);
+            var itemExistente = Itens.FirstOrDefault(i => i.Produto.Id == produto.Id);
+
+            if (itemExistente != null)
+            {
+                itemExistente.AdicionarQuantidade(quantidade);
+            }
+            else
+            {
+                Itens.Add(new ItemPedido(produto, quantidade));
+            }
         }
-            //calcula o preço dos produtos do pedido, sem o frete
+
+        // Calcula o preço total dos produtos do pedido (sem frete)
         public decimal ValorTotal
         {
             get
             {
-                return Produtos.Sum(p => p.Preco);
+                return Itens.Sum(i => i.ValorBruto);
             }
         }
     }
